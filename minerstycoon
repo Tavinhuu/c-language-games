@@ -1,0 +1,773 @@
+#include <stdio.h>
+#include <unistd.h>
+
+int dinheiro = 0, madeira = 0, pedras = 0;
+
+int escolhaMenu, i, ouroDaColeta, comprarMelhorias, voltarMenu,
+    coletarNovamente;
+
+int dinheiroPorSegundo = 1, madeiraPorSegundo = 0, pedraPorSegundo = 0;
+
+int tempoDeColeta = 1;
+
+int quantiaDeGnomos = 0, quantiaDeCasas = 0, quantiaDeCastelos = 0, quantiaDeFarol = 0, quantiaDeMaquinas = 0;
+
+int precoDeGnomoMinerador = 10, precoDeGnomoLenhador = 50, precoDeGnomoFerreiro = 100, precoDeCasa = 200, precoDeCastelo = 500, precoDeFarol = 1000, precoDeMaquinaMoeda = 1500, precoDeMaquinaMadeira = 2500, precoDeMaquinaPedra = 3500;
+
+char nomeDoReino[50];
+
+//////////////////////////////////////////////////////////////
+//                                                          //
+//                  DESENHOS EM ASCII                       //
+//           MINERS - JOGO POR GUSTAVO H. 2024              //
+//                                                          //
+//////////////////////////////////////////////////////////////
+
+char maquina[] =
+    "     _________\n"
+    "    / ======= \\\n"
+    "   / __________\\\n"
+    "  | ___________ |\n"
+    "  | | -       | |              YEAH LEGAL, VOCE COMPROU UMA MAQUINA!\n"
+    "  | |         | |\n"
+    "  | |_________| |_\n"
+    "  \\=____________/\n";
+
+char farol[] =
+    "        .n.\n"
+    "       /___\\\n"
+    "       [|||]\n"
+    "       [___]\n"
+    "       }-=-{\n"
+    "       |-  |                        YEAH! LEGAL, VOCE COMPROU UM FAROL\n"
+    "       |.- |\n"
+    "       | _.|                    AGORA SEUS GNOMOS TEM O TRIPLO DE EFICIENCIA\n"
+    "       |  _|\\\n"
+    "       | _.|__\n"
+    "       |  _|_/\\\n";
+char gnomo[] =
+    "                __\n"
+    "             .-'  |\n"
+    "            /   <\\|\n"
+    "           /     \\\n"
+    "           |_.- o-o                   YEAH! LEGAL, VOCE CONTRATOU UM GNOMO\n"
+    "           / C  -._)\\                    LEMBRE-SE DE CUIDAR BEM DELE\n"
+    "          /',        |\n"
+    "         |   `-,_,__,'\n";
+
+char casa[] =
+    "     _|=|__________\n"
+    "    /              \\\n"
+    "   /                \\              LEGAL! VOCE COMPROU UMA CASA\n"
+    "  /__________________\\\n"
+    "   ||  || /--\\ ||  ||            AGORA VOCE TEM O DOBRO DE MOEDAS!\n"
+    "   ||[]|| | .| ||[]||\n"
+    " ()||__||_|__|_||__||()\n"
+    " ( )|-|-|-|====|-|-|-|( )\n"
+    " ^^^^^^^^^^====^^^^^^^^^^^\n";
+
+char castelo[] =
+    "  / \\               / \\\n"
+    " /   \\             /   \\\n"
+    "(_____)           (_____)\n"
+    " |   |  _   _   _  |   |\n"
+    " | O |_| |_| |_| |_| O |\n"
+    " |   |   - _^_     |   |                LEGAL! VOCE COMPROU UM CASTELO\n"
+    " |  _|    //|\\\\  - |   |              AGORA SEUS GNOMOS RENDEM O DOBRO\n"
+    " |   |   ///|\\\\\\   |  -|\n"
+    " |-  |_  |||||||   |   |\n"
+    " |-  |_  |||||||   |   |\n"
+    " |___|___|||||||___|___|\n";
+
+char logo[] =
+    "\n\n\n"
+    "                         _____  .__                           \n"
+    "                        /     \\ |__| ____   ___________  ______\n"
+    "                       /  \\ /  \\|  |/    \\_/ __ \\_  __ \\/  ___/\n"
+    "                      /    Y    \\  |   |  \\  ___/|  | \\/\\___ \\ \n"
+    "                      \\____|__  /__|___|  /\\___  >__|  /____  >\n"
+    "                              \\/        \\/     \\/           \\/"
+    "\n\n";
+
+char inicio[] = {"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"
+                 "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n"};
+
+
+
+//////////////////////////////////////////////////////////////
+//                                                          //
+//        Simples tycoon feito para estudo em C             //
+//           MINERS - JOGO POR GUSTAVO H. 2024              //
+//                                                          //
+//////////////////////////////////////////////////////////////
+
+
+int main(void)
+{
+  printf("%s", inicio);
+  printf("%s", logo);
+  printf("Seja Bem vindo ao Miners, por favor, informe o nome do seu reino\n");
+  scanf("%s", &nomeDoReino);
+  menuInicial();
+}
+
+//////////////////////////////////////////////////////////////
+//                                                          //
+//                    MENU INFORMAÇÕES                      //
+//           MINERS - JOGO POR GUSTAVO H. 2024              //
+//                                                          //
+//////////////////////////////////////////////////////////////
+
+void menuInformacoes()
+{
+  printf("%s", inicio);
+  printf("%s", logo);
+  printf("             - Miners - Construa seu reino medieval e conquiste o "
+         "mundo!\n\n");
+  printf("\n\n  Bem vindos ao reino de %s", nomeDoReino);
+  printf("\n  Moedas: %d", dinheiro);
+  printf("\n  Madeiras: %d", madeira);
+  printf("\n  Pedras: %d", pedras);
+  printf("\n  Numero de gnomos: %d", quantiaDeGnomos);
+  printf("\n  Numero de maquinas: %d", quantiaDeMaquinas);
+  printf("\n  Numero de casas: %d", quantiaDeCasas);
+  printf("\n  Numero de castelos: %d", quantiaDeCastelos);
+  printf("\n  Numero de Farois: %d", quantiaDeFarol);
+  printf("\n\n");
+  printf("Digite qualquer valor para retornar ao menu\n");
+  scanf("%d", &voltarMenu);
+  if (voltarMenu == 1)
+  {
+    menuLoja();
+  }
+  else
+  {
+    menuInicial();
+  }
+}
+
+//////////////////////////////////////////////////////////////
+//                                                          //
+//                      MENU INICIAL                        //
+//           MINERS - JOGO POR GUSTAVO H. 2024              //
+//                                                          //
+//////////////////////////////////////////////////////////////
+
+int menuInicial()
+{
+  printf("%s", inicio);
+  printf("%s\n", logo);
+  printf("             - Miners - Construa seu reino medieval e conquiste o "
+         "mundo!\n");
+  printf("\n                            Digite a opcao desejada:\n");
+  printf("\n\n  1 - Colete recursos e moedas, util para melhorias\n");
+  printf("\n  2 - Construa seu reino\n");
+  printf("\n  3 - Adquira melhorias para seu reino\n");
+  printf("\n  4 - Informacoes do meu reino\n");
+  scanf("%d", &escolhaMenu);
+  switch (escolhaMenu)
+  {
+  case 1:
+    menuAventura();
+    break;
+  case 2:
+    menuLoja();
+    break;
+  case 3:
+    menuMelhorias();
+    break;
+  case 4:
+    menuInformacoes();
+    break;
+  default:
+    menuInicial();
+  }
+
+  return 0;
+}
+
+//////////////////////////////////////////////////////////////
+//                                                          //
+//                     MENU AVENTURA                        //
+//           MINERS - JOGO POR GUSTAVO H. 2024              //
+//                                                          //
+//////////////////////////////////////////////////////////////
+
+int menuAventura()
+{
+  int escolhaMenuAventura;
+  printf("%s", inicio);
+  printf("%s\n", logo);
+  printf("             - Miners - Construa seu reino medieval e conquiste o "
+         "mundo!\n");
+  printf("\n                            Digite a opção desejada:\n");
+  printf("\n\n  1 - Colete moedas, utilize para comprar propriedades ou "
+         "melhorias\n");
+  printf("\n  2 - Colete madeiras, util para construir propriedades "
+         "resistentes\n");
+  printf("\n  3 - Colete pedras, util para construir propriedades especiais\n");
+  printf("\n  4 - Voltar para o menu principal\n");
+  scanf("%d", &escolhaMenuAventura);
+  switch (escolhaMenuAventura)
+  {
+  case 1:
+    menuColetaDeOuro();
+    break;
+  case 2:
+    menuColetaMadeira();
+    break;
+  case 3:
+    menuColetaPedra();
+    break;
+  case 4:
+    menuInicial();
+    break;
+  default:
+    menuAventura();
+  }
+  menuInicial();
+  return 0;
+}
+
+//////////////////////////////////////////////////////////////
+//                                                          //
+//                       MENU OURO                          //
+//           MINERS - JOGO POR GUSTAVO H. 2024              //
+//                                                          //
+//////////////////////////////////////////////////////////////
+
+int menuColetaDeOuro(void)
+{
+  printf("%s", inicio);
+  printf("%s", logo);
+  printf("Digite quantas vezes deseja coletar ouro nas minas\n");
+  scanf("%d", &ouroDaColeta);
+  for (i = 0; i < ouroDaColeta; i++)
+  {
+    dinheiro += dinheiroPorSegundo;
+    printf("Legal, foi encontrado ouro! Sua balanca e de %d\n", dinheiro);
+    sleep(tempoDeColeta);
+  }
+  printf("\n\nVoce finalizou sua aventura! Deseja recomecar?\n1 - "
+         "Sim\n\nDigite outro valor para retornar ao menu\n");
+  scanf("%d", &coletarNovamente);
+  if (coletarNovamente == 1)
+  {
+    menuColetaDeOuro();
+  }
+  else
+  {
+    menuInicial();
+  }
+}
+
+//////////////////////////////////////////////////////////////
+//                                                          //
+//                      MENU MADEIRA                        //
+//           MINERS - JOGO POR GUSTAVO H. 2024              //
+//                                                          //
+//////////////////////////////////////////////////////////////
+
+int menuColetaMadeira(void)
+{
+  if (madeiraPorSegundo <= 0)
+  {
+    printf("%s", inicio);
+    printf("%s", logo);
+    printf("Essa nao! Voce ainda nao tem um gnomo lenhador");
+    printf("\n\nDigite qualquer valor para retornar ao menu inicial\n");
+    scanf("%d", &voltarMenu);
+    if (voltarMenu == 1)
+    {
+      menuAventura();
+    }
+    else
+    {
+      menuInicial();
+    }
+  }
+  else
+  {
+    aventuraMadeira();
+  }
+}
+
+int aventuraMadeira(void)
+{
+  printf("%s", inicio);
+  printf("%s", logo);
+  printf("Quantas vezes deseja coletar madeira?\n");
+  scanf("%d", &ouroDaColeta);
+  for (i = 0; i < ouroDaColeta; i++)
+  {
+    madeira += madeiraPorSegundo;
+    printf("Legal! Seus gnomos estao coletando madeira, agora voce tem %d madeiras!\n", madeira);
+    sleep(tempoDeColeta);
+  }
+
+  printf("\n\nVoce finalizou sua aventura! Deseja recomecar?\n1 - "
+         "Sim\n\nDigite outro valor para retornar ao menu\n");
+  scanf("%d", &coletarNovamente);
+  if (coletarNovamente == 1)
+  {
+    menuColetaDeOuro();
+  }
+  else
+  {
+    menuInicial();
+  }
+  return 0;
+}
+
+//////////////////////////////////////////////////////////////
+//                                                          //
+//                      MENU PEDRA                          //
+//           MINERS - JOGO POR GUSTAVO H. 2024              //
+//                                                          //
+//////////////////////////////////////////////////////////////
+
+int menuColetaPedra(void)
+{
+  if (pedraPorSegundo <= 0)
+  {
+    printf("%s", inicio);
+    printf("%s", logo);
+    printf("Essa nao! Voce ainda nao tem um gnomo ferreiro");
+    printf("\n\nDigite qualquer valor para retornar ao menu inicial\n");
+    scanf("%d", &voltarMenu);
+    if (voltarMenu == 1)
+    {
+      menuAventura();
+    }
+    else
+    {
+      menuInicial();
+    }
+  }
+  else
+  {
+    aventuraPedra();
+  }
+  return 0;
+}
+
+int aventuraPedra(void)
+{
+  printf("%s", inicio);
+  printf("%s", logo);
+  printf("Quantas vezes deseja coletar pedra?\n");
+  scanf("%d", &ouroDaColeta);
+  for (i = 0; i < ouroDaColeta; i++)
+  {
+    pedras += pedraPorSegundo;
+    printf("Seus gnomos estao coletando pedras, agora voce tem %d pedras!\n", pedras);
+    sleep(tempoDeColeta);
+  }
+  printf("\n\nVoce finalizou sua aventura! Deseja recomecar?\n1 - "
+         "Sim\n\nDigite outro valor para retornar ao menu\n");
+  scanf("%d", &coletarNovamente);
+  if (coletarNovamente == 1)
+  {
+    menuColetaDeOuro();
+  }
+  else
+  {
+    menuInicial();
+  }
+  return 0;
+}
+
+//////////////////////////////////////////////////////////////
+//                                                          //
+//                      MENU LOJA                           //
+//           MINERS - JOGO POR GUSTAVO H. 2024              //
+//                                                          //
+//////////////////////////////////////////////////////////////
+
+int menuLoja(void)
+{
+  printf("%s", inicio);
+  printf("%s", logo);
+  printf("             - Miners - Construa seu reino medieval e conquiste o "
+         "mundo!\n\n");
+  printf("\n  1 - CASA DE GNOMO\n      Utilidade: dobra o valor de suas moedas, +1 ponto de XP \n      Itens necessarios: 20x madeiras, 10x pedras\n      Valor: $%d\n", precoDeCasa);
+  printf("\n 2 - CASTELO DE GNOMO\n      Utilidade: +1 ponto de XP, seus gnomos tem o dobro de eficacia\n      Itens necessarios: 50x madeira, 150x pedras\n      Valor: $%d\n", precoDeCastelo);
+  printf("\n 3 - FAROL\n      Utilidade: +1 ponto de XP, seus gnomos tem o triplo de eficacia\n      Itens necessarios: 200x madeira, 350x pedras\n      Valor: $%d\n", precoDeFarol);
+  scanf("%d", &escolhaMenu);
+
+  switch (escolhaMenu)
+  {
+
+  case 1:
+    if (dinheiro >= 200 & madeira >= 20 & pedras >= 10)
+    {
+      printf("%s", inicio);
+      printf("%s", logo);
+      printf("%s", casa);
+      dinheiro -= precoDeCasa;
+      dinheiro *= 2;
+      madeira -= 20;
+      pedras -= 10;
+      quantiaDeCasas += 1;
+      precoDeCasa += 20;
+      printf("\n\nDigite qualquer valor para retornar ao menu inicial\n");
+      scanf("%d", &voltarMenu);
+
+      if (voltarMenu == 1)
+      {
+        menuLoja();
+      }
+      else
+      {
+        menuInicial();
+      }
+    }
+    else
+    {
+      printf("%s", inicio);
+      printf("Voce nao tem recurso suficiente para comprar esse item\n");
+      printf("\n\nDigite qualquer valor para retornar ao menu inicial\n");
+      scanf("%d", &voltarMenu);
+
+      if (voltarMenu == 1)
+      {
+        menuGnomos();
+      }
+      else
+      {
+        menuInicial();
+      }
+    }
+    break;
+  case 2:
+    if (dinheiro >= 500 & madeira >= 50 & pedras >= 150)
+    {
+      printf("%s", inicio);
+      printf("%s", logo);
+      printf("%s", castelo);
+      dinheiro -= precoDeCastelo;
+      madeira -= 50;
+      pedras -= 150;
+      quantiaDeCastelos += 1;
+      dinheiroPorSegundo *= 2;
+      precoDeCastelo += 20;
+      printf("\n\nDigite qualquer valor para retornar ao menu inicial\n");
+      scanf("%d", &voltarMenu);
+
+      if (voltarMenu == 1)
+      {
+        menuLoja();
+      }
+      else
+      {
+        menuInicial();
+      }
+    }
+    else
+    {
+      printf("%s", inicio);
+      printf("Voce nao tem recurso suficiente para comprar esse item\n");
+      printf("\n\nDigite qualquer valor para retornar ao menu inicial\n");
+      scanf("%d", &voltarMenu);
+
+      if (voltarMenu == 1)
+      {
+        menuGnomos();
+      }
+      else
+      {
+        menuInicial();
+      }
+    }
+
+    break;
+  case 3:
+    if (dinheiro >= precoDeFarol & madeira >= 200 & pedras >= 350)
+    {
+      printf("%s", inicio);
+      printf("%s", logo);
+      printf("%s", farol);
+      dinheiro -= precoDeFarol;
+      madeira -= 200;
+      pedras -= 350;
+      precoDeFarol += 30;
+      quantiaDeFarol += 1;
+      printf("\n\nDigite qualquer valor para retornar ao menu inicial\n");
+      scanf("%d", &voltarMenu);
+
+      if (voltarMenu == 1)
+      {
+        menuLoja();
+      }
+      else
+      {
+        menuInicial();
+      }
+    }
+
+    break;
+  default:
+    menuInicial();
+    break;
+  }
+  return 0;
+}
+
+//////////////////////////////////////////////////////////////
+//                                                          //
+//                     MENU MÁQUINAS                        //
+//           MINERS - JOGO POR GUSTAVO H. 2024              //
+//                                                          //
+//////////////////////////////////////////////////////////////
+
+int menuMaquinas(void)
+{
+  printf("%s", inicio);
+  printf("%s", logo);
+  printf("             - Miners - Construa seu reino medieval e conquiste o "
+         "mundo!\n\n");
+  printf("  1 - Maquina de moedas\n      Utilidade: Fornece 100 moedas por segundo \n      Itens necessarios: 500x madeira, 500x pedras\n      Valor: $%d\n", precoDeMaquinaMoeda);
+  printf("  2 - Maquina de madeira\n      Utilidade: Fornece 100 madeiras por segundo \n      Itens necessarios: 500x madeira, 500x pedras\n      Valor: $%d\n", precoDeMaquinaMadeira);
+  printf("  3 - Maquina de pedras\n      Utilidade: Fornece 100 pedras por segundo \n      Itens necessarios: 500x madeira, 500x pedras\n      Valor: $%d\n", precoDeMaquinaPedra);
+  scanf("%d", &escolhaMenu);
+  switch (escolhaMenu)
+  {
+  case 1:
+    if (dinheiro >= precoDeMaquinaMoeda & madeira >= 500 & pedras >= 500)
+    {
+      printf("%s", inicio);
+      printf("%s\n\n", logo);
+      printf("%s", maquina);
+      dinheiroPorSegundo += 100;
+      dinheiro -= precoDeMaquinaMoeda;
+      madeira -= 500;
+      pedras -= 500;
+      precoDeMaquinaMoeda += 10;
+      quantiaDeMaquinas += 1;
+      printf("\n\nDigite qualquer valor para retornar ao menu inicial\n");
+      scanf("%d", &voltarMenu);
+
+      if (voltarMenu == 1)
+      {
+        menuGnomos();
+      }
+      else
+      {
+        menuInicial();
+      }
+      break;
+    case 2:
+      if (dinheiro >= precoDeMaquinaMadeira & madeira >= 500 & pedras >= 500)
+      {
+        printf("%s", inicio);
+        printf("%s\n\n", logo);
+        printf("%s", maquina);
+        madeiraPorSegundo += 100;
+        dinheiro -= precoDeMaquinaMadeira;
+        madeira -= 500;
+        pedras -= 500;
+        precoDeMaquinaMadeira += 10;
+        quantiaDeMaquinas += 1;
+        printf("\n\nDigite qualquer valor para retornar ao menu inicial\n");
+        scanf("%d", &voltarMenu);
+
+        if (voltarMenu == 1)
+        {
+          menuGnomos();
+        }
+        else
+        {
+          menuInicial();
+        }
+        break;
+      case 3:
+        if (dinheiro >= precoDeMaquinaPedra & madeira >= 500 & pedras >= 500)
+        {
+          printf("%s", inicio);
+          printf("%s\n\n", logo);
+          printf("%s", maquina);
+          pedraPorSegundo += 100;
+          dinheiro -= precoDeMaquinaPedra;
+          madeira -= 500;
+          pedras -= 500;
+          precoDeMaquinaPedra += 10;
+          quantiaDeMaquinas += 1;
+          printf("\n\nDigite qualquer valor para retornar ao menu inicial\n");
+          scanf("%d", &voltarMenu);
+
+          if (voltarMenu == 1)
+          {
+            menuGnomos();
+          }
+          else
+          {
+            menuInicial();
+          }
+          break;
+        default:
+          menuInicial();
+          break;
+        }
+      }
+    }
+  }
+}
+
+
+//////////////////////////////////////////////////////////////
+//                                                          //
+//                      MENU MELHORIAS                      //
+//           MINERS - JOGO POR GUSTAVO H. 2024              //
+//                                                          //
+//////////////////////////////////////////////////////////////
+
+int menuMelhorias(void)
+{
+  printf("%s", inicio);
+  printf("%s", logo);
+  printf("             - Miners - Construa seu reino medieval e conquiste o "
+         "mundo!\n");
+  printf("\n                            Digite a opção desejada:\n");
+  printf("\n\n  1 - Digite para contratar gnomos\n");
+  printf("\n  2 - Digite para adquirir maquinas\n");
+  printf("\n\nDigite qualquer valor para retornar ao menu\n");
+  scanf("%d", &comprarMelhorias);
+
+  switch (comprarMelhorias)
+  {
+  case 1:
+    menuGnomos();
+  case 2:
+    menuMaquinas();
+    break;
+  default:
+    menuInicial();
+    break;
+  }
+  return 0;
+}
+
+//////////////////////////////////////////////////////////////
+//                                                          //
+//                      MENU GNOMOS                         //
+//           MINERS - JOGO POR GUSTAVO H. 2024              //
+//                                                          //
+//////////////////////////////////////////////////////////////
+
+int menuGnomos(void)
+{
+
+  printf("%s", inicio);
+  printf("%s", logo);
+  printf("             - Miners - Construa seu reino medieval e conquiste o "
+         "mundo!\n\n");
+  printf("\n  1 - Gnomo Minerador, coleta 1 ouro por segundo - $%d moedas\n", precoDeGnomoMinerador);
+  printf("\n  2 - Gnomo Lenhador, coleta 1 madeira - $%d moedas\n", precoDeGnomoLenhador);
+  printf("\n  3 - Gnomo Ferreiro, coleta 1 pedra - $%d moedas\n", precoDeGnomoFerreiro);
+  printf("\n  4 - Voltar para o menu principal\n");
+  scanf("%d", &escolhaMenu);
+  switch (escolhaMenu)
+  {
+
+    /////////// GNOMO MINERADOR ///////////
+
+  case 1:
+    if (dinheiro >= precoDeGnomoMinerador)
+    {
+      dinheiro -= precoDeGnomoMinerador;
+      printf("%s", inicio);
+      printf("%s\n\n", logo);
+      printf("%s", gnomo);
+      dinheiroPorSegundo += 1;
+      tempoDeColeta -= 1;
+      quantiaDeGnomos += 1;
+      if (tempoDeColeta == 0)
+      {
+        tempoDeColeta += 1;
+      }
+      precoDeGnomoMinerador += 20;
+
+      printf("\n\nDigite qualquer valor para retornar ao menu inicial\n");
+      scanf("%d", &voltarMenu);
+
+      if (voltarMenu == 1)
+      {
+        menuGnomos();
+      }
+      else
+      {
+        menuInicial();
+      }
+    }
+    if (dinheiro < precoDeGnomoMinerador)
+    {
+      printf("%s", inicio);
+      printf("Voce nao tem dinheiro suficiente para comprar esse item\n");
+      printf("\n\nDigite qualquer valor para retornar ao menu inicial\n");
+      scanf("%d", &voltarMenu);
+
+      if (voltarMenu == 1)
+      {
+        menuGnomos();
+      }
+      else
+      {
+        menuInicial();
+      }
+    }
+    break;
+
+    /////////// GNOMO LENHADOR ///////////
+
+  case 2:
+    if (dinheiro >= precoDeGnomoLenhador)
+    {
+      dinheiro -= precoDeGnomoLenhador;
+      printf("%s", inicio);
+      printf("%s\n\n", logo);
+      printf("%s", gnomo);
+      madeiraPorSegundo += 1;
+      precoDeGnomoLenhador += 50;
+      quantiaDeGnomos += 1;
+      printf("\n\nDigite qualquer valor para retornar ao menu inicial\n");
+      scanf("%d", &voltarMenu);
+
+      if (voltarMenu == 1)
+      {
+        menuGnomos();
+      }
+      else
+      {
+        menuInicial();
+      }
+    }
+
+    break;
+
+    /////////// GNOMO FERREIRO ///////////
+
+  case 3:
+    if (dinheiro >= precoDeGnomoFerreiro)
+    {
+      dinheiro -= precoDeGnomoFerreiro;
+      printf("%s", inicio);
+      printf("%s\n\n", logo);
+      printf("%s", gnomo);
+      precoDeGnomoFerreiro += 100;
+      pedraPorSegundo += 1;
+      quantiaDeGnomos += 1;
+      printf("\n\nDigite qualquer valor para retornar ao menu inicial\n");
+      scanf("%d", &voltarMenu);
+
+      if (voltarMenu == 1)
+      {
+        menuGnomos();
+      }
+      else
+      {
+        menuInicial();
+      }
+    }
+    break;
+  }
+}
