@@ -107,7 +107,7 @@ int main(void)
   printf("%s", inicio);
   printf("%s", logo);
   printf("Seja Bem vindo ao Miners, por favor, informe o nome do seu reino\n");
-  scanf("%s", &nomeDoReino);
+  scanf("%50[^\n]s", &nomeDoReino);
   menuInicial();
 }
 
