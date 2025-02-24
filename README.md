@@ -1,5 +1,5 @@
 # Jogos-em-C
-🐱‍💻 Lista de jogos feitos para estudo utilizando a linguagem C ✨
+🐱‍💻 List of games made for study using the C language ✨
 
 ✨ Projeto desenvolvido para estudo de linguagem C.
 <br>
